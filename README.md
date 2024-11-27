@@ -1,2 +1,2 @@
-# adc
+# ADC
 Advent of Code
