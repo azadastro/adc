@@ -1,4 +1,4 @@
-with open("2023\inputs\\1.txt", "r") as f:
+with open("inputs\prob.txt", "r") as f:
     input = f.readlines()
 
 
