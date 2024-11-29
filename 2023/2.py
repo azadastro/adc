@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-with open("2023/inputs/3.txt", "r") as f:
+with open("2023/inputs/2.txt", "r") as f:
     lines = f.readlines()
 
 
