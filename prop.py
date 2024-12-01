@@ -1,53 +1,55 @@
 import re
 import numpy as np
 
-with open("2023/inputs/3.txt", "r") as f:
-    lines = f.readlines()
+lines = open("2023/inputs/3.txt").read().splitlines()
+
+
+def find_number(string):
+    numbers = dict(
+        (m.group(), (m.start(), m.end())) for m in re.finditer(r"\d+", string)
+    )
+    return numbers
 
 
 def part_one():
-    max_cubes = {"red": 12, "green": 13, "blue": 14}
-
-    possible_game_ids = []
+    new_grid = []
+    len_line = len(lines[0]) + 2
+    new_grid.append("." * len_line)
     for line in lines:
-        not_possible = False
-        game_id, game_all_cubes = line.split(":")
-        game_id = int(re.findall(r"\d+", game_id)[0])
+        new_grid.append("." + line + ".")
+    new_grid.append("." * len_line)
 
-        slpit_all_cubes = game_all_cubes.split(";")
-        for play in slpit_all_cubes:
-            colors = play.split(",")
-            for color in colors:
-                num_color, c = color.strip().split(" ")
-                if int(num_color) > max_cubes[c]:
-                    not_possible = True
-                    break
-            if not_possible:
-                break
+    symbols = set()
+    engine_parts = []
 
-        if not not_possible:
-            possible_game_ids.append(game_id)
+    for i, (pre_line, line, nxt_line) in enumerate(
+        zip(new_grid[0:-2], new_grid[1:-1], new_grid[2:]), 1
+    ):
+        numbers = find_number(line)
+        for number, (s, e) in numbers.items():
+            s = s - 1
+            e = e + 1
 
-    print(sum(possible_game_ids))
+            all_lines = "".join(
+                [ch for ch in line[s:e].replace(".", "") if not ch.isdigit()]
+            )
+            all_lines += "".join(
+                [ch for ch in pre_line[s:e].replace(".", "") if not ch.isdigit()]
+            )
+            all_lines += "".join(
+                [ch for ch in nxt_line[s:e].replace(".", "") if not ch.isdigit()]
+            )
+
+            if len(all_lines) > 0:
+                symbols.add(all_lines)
+                engine_parts.append(int(number))
+
+    print(sum(engine_parts))
+    return engine_parts
 
 
 def part_two():
-    power_set = []
-    for line in lines:
-        min_cubes = {"red": 1, "green": 1, "blue": 1}
-        game_id, game_all_cubes = line.split(":")
-
-        slpit_all_cubes = game_all_cubes.split(";")
-        for play in slpit_all_cubes:
-            colors = play.split(",")
-            for color in colors:
-                num_color, c = color.strip().split(" ")
-                if int(num_color) > min_cubes[c]:
-                    min_cubes[c] = int(num_color)
-
-        power_set.append(np.prod(list(min_cubes.values())))
-
-    print(sum(power_set))
+    pass
 
 
 if __name__ == "__main__":
