@@ -35,31 +35,42 @@ def part_one():
     print(len(visited))
 
 
-def part_two():
-
+def check_loop(grid):
     x, y = get_start_point()
     move = "^"
-    visited = []
-    loop = 0
-    visited.append((x, y, move))
-    while 0 <= x + moves[move][0] < len(lines) and 0 <= y + moves[move][1] < len(
-        lines[0]
+    visited = set()
+
+    visited.add((x, y, "^"))
+    while 0 <= x + moves[move][0] < len(grid) and 0 <= y + moves[move][1] < len(
+        grid[0]
     ):
 
         next_x = x + moves[move][0]
         next_y = y + moves[move][1]
 
-        if (next_x, next_y, moves[move][2]) in visited:
-            loop += 1
-
-        if lines[next_x][next_y] == "#":
+        if grid[next_x][next_y] == "#":
             move = moves[move][2]
         else:
             x = next_x
             y = next_y
-            visited.append((x, y, move))
+            if (x, y, move) in visited:
+                return True
+            visited.add((x, y, move))
 
-    print(len(visited))
+    return False
+
+
+def part_two():
+
+    loop_count = 0
+    grid = "\n".join(lines)
+    for i in range(len(grid)):
+        if grid[i] == ".":
+            new_grid = grid[:i] + "#" + grid[i + 1 :]
+            if check_loop(new_grid.splitlines()):
+                loop_count += 1
+
+    print(loop_count)
 
 
 if __name__ == "__main__":
