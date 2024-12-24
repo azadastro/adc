@@ -1,8 +1,7 @@
 lines = open("2024/inputs/23.txt").read().splitlines()
 
 
-def part_one():
-
+def get_connections():
     connections = {}
     for line in lines:
         pc1, pc2 = line.split("-")
@@ -13,6 +12,13 @@ def part_one():
 
         connections[pc1].add(pc2)
         connections[pc2].add(pc1)
+
+    return connections
+
+
+def part_one():
+
+    connections = get_connections()
 
     networks = set()
     for pc1, connection in connections.items():
@@ -31,28 +37,26 @@ def part_one():
 
 def part_two():
 
-    connections = {}
-    for line in lines:
-        pc1, pc2 = line.split("-")
-        if pc1 not in connections:
-            connections[pc1] = {pc1}
-        if pc2 not in connections:
-            connections[pc2] = {pc2}
+    connections = get_connections()
 
-        connections[pc1].add(pc2)
-        connections[pc2].add(pc1)
+    networks = set()
 
-    networks = []
-    for pc1, connection in connections.items():
-        cur_connection = connection
-        for pc in connection:
-            cur_connection = cur_connection.intersection(connections[pc])
+    def find_network(pc, other_pcs):
+        key = tuple(sorted(other_pcs))
+        if key in networks:
+            return
+        networks.add(key)
+        for neighbor in connections[pc]:
+            if neighbor in other_pcs:
+                continue
+            if not all(neighbor in connections[query] for query in other_pcs):
+                continue
+            find_network(neighbor, {*other_pcs, neighbor})
 
-        networks.append(cur_connection)
+    for connection in connections:
+        find_network(connection, {connection})
 
-    total_t_network = 0
-
-    print(total_t_network)
+    print(",".join(sorted(max(networks, key=len))))
 
 
 if __name__ == "__main__":
