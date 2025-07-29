@@ -1,4 +1,4 @@
-line = open("inputs.txt").read()
+line = open("file_name.txt").read()
 
 
 def part_one():

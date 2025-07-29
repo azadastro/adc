@@ -1,4 +1,4 @@
-l_ks = open("2024/inputs/25.txt").read().split("\n\n")
+l_ks = open("2024\inputs\\25.txt").read().split("\n\n")
 
 
 def get_lock_keys():
