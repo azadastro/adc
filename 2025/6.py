@@ -21,9 +21,27 @@ def part_one(lines):
     
     print(sum(op_out))
 
-def part_two():
+def part_two(lines):
 
-    pass
+    in_list =[[] for _ in range(len(lines[1].split()))]
+    r = 0
+    for i in range(len(lines[0])):
+        s = "".join([lines[r][i] for r in range(len(lines)-1)])
+        if s.strip():
+            in_list[r].append(int(s.strip()))
+        else:
+            r +=1
+    
+    op_out = []
+    for i, o in enumerate(lines[-1].split()):
+        if o == "+":
+            op_out.append(sum(in_list[i]))
+        elif o == "*":
+            op_out.append(math.prod(in_list[i]))
+        else:
+            print("Unknown Operator")
+    
+    print(sum(op_out))
 
 
 if __name__ == "__main__":
@@ -32,4 +50,4 @@ if __name__ == "__main__":
     part_one(lines)
 
     print("Part Two:")
-    part_two()
+    part_two(lines)
