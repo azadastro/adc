@@ -15,15 +15,28 @@ def part_one(ranges , ingredients):
             if ingredient >= s and ingredient <= e:
                 fresh.append(ingredient)
                 break
-            
 
     print(len(fresh))
 
 
 def part_two(ranges):
 
-    pass
+    ranges.sort()
+    
+    range = None
+    count = 0
 
+    for s, e in ranges:
+        if range == None:
+            range = (s, e)
+        elif range[1] < s:
+            count += range[1] - range[0] + 1
+            range = (s, e)
+        else:
+            range = (range[0] , max(range[1], e))
+
+    count += range[1] - range[0] + 1
+    print(count)
 
 if __name__ == "__main__":
 
