@@ -12,8 +12,19 @@ def part_one(lines):
 
 
 def part_two(lines):
-    pass
+    batteries = []
+    for line in lines:
+        line = list(map(int, list(line)))
+        battery = ""
+        for i in range(11):
+            max_battery = max(line[:i-11])
+            battery += str(max_battery)
+            line = line[line.index(max_battery)+1:]
 
+        battery += str(max(line))
+        batteries.append(int(battery))
+
+    print(sum(batteries))
 
 if __name__ == "__main__":
 
